@@ -1,0 +1,49 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>your test stream enviroment - livestream.red</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <center>
+    <h1>your test stream enviroment - livestream.red</h1>
+    <video height="540" id="video" controls></video>
+  </center>
+
+  <script>
+    if (Hls.isSupported()) {
+      var video = document.getElementById('video');
+      var hls = new Hls({
+        startPosition: 0,
+        autoStartLoad: true
+      });
+      hls.loadSource('https://hls.livestream.red/index.m3u8');
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MEDIA_ATTACHED, function() {
+        video.muted = true;
+        video.play();
+      });
+
+      hls.on(Hls.Events.MANIFEST_PARSED, function() {
+        video.muted = true;
+        video.play();
+      });
+    }
+
+    // hls.js is not supported on platforms that do not have Media Source Extensions (MSE) enabled.
+    // When the browser has built-in HLS support (check using `canPlayType`), we can provide an HLS manifest (i.e. .m3u8 URL) directly to the video element throught the `src` property.
+    // This is using the built-in support of the plain video element, without using hls.js.
+    else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = 'https://hls.livestream.red/index.m3u8';
+      video.addEventListener('canplay', function() {
+        video.play();
+      });
+    }
+  </script>
+
+
+</body>
+
+</html>
